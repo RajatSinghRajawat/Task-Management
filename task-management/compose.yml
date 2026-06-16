@@ -1,0 +1,88 @@
+services:
+  # MongoDB Database Service
+  mongodb:
+    image: mongo:7.0
+    container_name: task-management-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - task-network
+
+  # Backend Express API Service
+  backend:
+    build:
+      context: ./Taskmanagement-backend
+      dockerfile: Dockerfile
+    container_name: task-management-backend
+    environment:
+      - PORT=7001
+      - MONGO_URI=mongodb://mongodb:27017/task-management
+    env_file:
+      - ./Taskmanagement-backend/.env
+    volumes:
+      # Bind-mount the public uploads folder so uploaded files sync directly with the host filesystem
+      - ./Taskmanagement-backend/public:/app/public
+    depends_on:
+      - mongodb
+    networks:
+      - task-network
+
+  # Admin Panel
+  admin:
+    build:
+      context: ./taskmanagement-Admin
+      dockerfile: Dockerfile
+    container_name: task-management-admin
+    depends_on:
+      - backend
+    networks:
+      - task-network
+
+  # Students Panel
+  students:
+    build:
+      context: ./Taskmanagement-Students
+      dockerfile: Dockerfile
+    container_name: task-management-students
+    depends_on:
+      - backend
+    networks:
+      - task-network
+
+  # Teachers Panel
+  teachers:
+    build:
+      context: ./Taskmanagement-Teachers
+      dockerfile: Dockerfile
+    container_name: task-management-teachers
+    depends_on:
+      - backend
+    networks:
+      - task-network
+
+  # Global Nginx Reverse Proxy Service with SSL
+  nginx:
+    image: nginx:alpine
+    container_name: task-management-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - admin
+      - students
+      - teachers
+      - backend
+    networks:
+      - task-network
+
+volumes:
+  mongo-data:
+
+networks:
+  task-network:
+    driver: bridge

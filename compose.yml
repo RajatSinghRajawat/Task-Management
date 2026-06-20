@@ -1,0 +1,66 @@
+services:
+  # Backend Express API Service
+  backend:
+    build:
+      context: ./Taskmanagement-backend
+      dockerfile: Dockerfile
+    container_name: task-management-backend
+    ports:
+      - "5183:7001"
+    env_file:
+      - ./Taskmanagement-backend/.env
+    volumes:
+      # Bind-mount the public uploads folder so uploaded files sync directly with the host filesystem
+      - ./Taskmanagement-backend/public:/app/public
+
+    networks:
+      - task-network
+
+  # Admin Panel (served on port 5175)
+  admin:
+    build:
+      context: ./taskmanagement-Admin
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:5183}
+    container_name: task-management-admin
+    ports:
+      - "5182:80"
+    depends_on:
+      - backend
+    networks:
+      - task-network
+
+  # Students Panel (served on port 5173)
+  students:
+    build:
+      context: ./Taskmanagement-Students
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:5183}
+    container_name: task-management-students
+    ports:
+      - "5180:80"
+    depends_on:
+      - backend
+    networks:
+      - task-network
+
+  # Teachers Panel (served on port 5174)
+  teachers:
+    build:
+      context: ./Taskmanagement-Teachers
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:5183}
+    container_name: task-management-teachers
+    ports:
+      - "5181:80"
+    depends_on:
+      - backend
+    networks:
+      - task-network
+
+networks:
+  task-network:
+    driver: bridge

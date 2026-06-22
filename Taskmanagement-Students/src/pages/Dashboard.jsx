@@ -39,6 +39,14 @@ const Dashboard = () => {
       ]);
 
       const student = profileRes.data.student;
+
+      if (profileRes.data?.success === false || profileRes.data?.noProfile === true) {
+        localStorage.clear();
+        navigate('/login');
+        window.location.reload();
+        return;
+      }
+
       const course = student?.courses || student?.course || localStorage.getItem('studentCourse') || 'General';
       const batch = student?.batch || localStorage.getItem('studentBatch') || '2024';
 

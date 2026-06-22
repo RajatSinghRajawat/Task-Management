@@ -22,7 +22,7 @@ services:
       context: ./taskmanagement-Admin
       dockerfile: Dockerfile
       args:
-        - VITE_API_URL=${VITE_API_URL:-http://localhost:5183}
+        - VITE_API_URL=${VITE_API_URL:-}
     container_name: task-management-admin
     ports:
       - "5182:80"
@@ -37,7 +37,7 @@ services:
       context: ./Taskmanagement-Students
       dockerfile: Dockerfile
       args:
-        - VITE_API_URL=${VITE_API_URL:-http://localhost:5183}
+        - VITE_API_URL=${VITE_API_URL:-}
     container_name: task-management-students
     ports:
       - "5180:80"
@@ -52,7 +52,7 @@ services:
       context: ./Taskmanagement-Teachers
       dockerfile: Dockerfile
       args:
-        - VITE_API_URL=${VITE_API_URL:-http://localhost:5183}
+        - VITE_API_URL=${VITE_API_URL:-}
     container_name: task-management-teachers
     ports:
       - "5181:80"

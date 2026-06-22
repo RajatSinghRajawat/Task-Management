@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { getApiBaseUrl } from '../../utils/api';
 
+const AUTH_TOKEN = () => localStorage.getItem('token');
 const API = `${getApiBaseUrl()}/api/students`;
 const BASE_URL = `${getApiBaseUrl()}/`;
 

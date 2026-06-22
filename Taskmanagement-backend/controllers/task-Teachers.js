@@ -42,7 +42,8 @@ const createTask = async (req, res) => {
             Deadline,
             Batch,
             Assigned_To: students.map(s => s._id),
-            uploadedBy: req.user.id
+            uploadedBy: req.user.id,
+            Attachments: req.files ? req.files.map(file => file.path) : []
         });
 
         await Promise.all(students.map(s =>
@@ -157,12 +158,16 @@ Description: ${Description || "No description"}
 </div>
 `;
 
-            await sendEmail(
-                emails,
-                `New Task: ${Title}`,
-                message,
-                html   // 👈 UI yaha add kiya
-            );
+            try {
+                await sendEmail(
+                    emails,
+                    `New Task: ${Title}`,
+                    message,
+                    html   // 👈 UI yaha add kiya
+                );
+            } catch (emailError) {
+                console.error("SMTP Notification Email Error (skipping):", emailError);
+            }
         }
 
         res.status(201).json({

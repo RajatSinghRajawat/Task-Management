@@ -22,11 +22,14 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-        const filetypes = /avif|jpeg|jpg|png|gif|webp|svg|mp4|webm|dat|xlsx|xls|csv|pdf|zip/;
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = filetypes.test(file.mimetype);
+        const allowedExtensions = [
+            ".avif", ".jpeg", ".jpg", ".png", ".gif", ".webp", ".svg", 
+            ".mp4", ".webm", ".dat", ".xlsx", ".xls", ".csv", ".pdf", 
+            ".zip", ".txt", ".doc", ".docx"
+        ];
+        const ext = path.extname(file.originalname).toLowerCase();
 
-        if (extname && mimetype) {
+        if (allowedExtensions.includes(ext)) {
             return cb(null, true);
         } else {
             return cb(new Error("invalid file type"), false);

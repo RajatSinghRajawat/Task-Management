@@ -21,7 +21,12 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes("*")) {
+    if (
+      allowedOrigins.indexOf(origin) !== -1 || 
+      allowedOrigins.includes("*") ||
+      /^http:\/\/localhost:\d+$/.test(origin) ||
+      /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)
+    ) {
       return callback(null, true);
     }
     return callback(new Error('The CORS policy for this site does not allow access from the specified Origin.'), false);

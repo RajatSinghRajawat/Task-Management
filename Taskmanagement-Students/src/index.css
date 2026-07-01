@@ -11,5 +11,6 @@
 }
 
 html, body {
-  @apply antialiased;
+  @apply antialiased text-slate-900 bg-[#f8fafc];
+  font-size: 13.5px;
 }

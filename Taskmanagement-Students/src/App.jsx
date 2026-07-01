@@ -20,7 +20,7 @@ function App() {
           localStorage.getItem('studentToken') ? <Navigate to="/" replace /> : <Login />
         } />
         <Route path="/register" element={
-          localStorage.getItem('studentToken') ? <Navigate to="/" replace /> : <Register />
+          <Navigate to="/login" replace />
         } />
         
         {/* Protected Student Portal */}

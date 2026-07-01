@@ -183,12 +183,10 @@ const Students = () => {
             className="px-3 py-2 bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 rounded-xl focus:outline-none focus:border-slate-400 focus:ring-4 focus:ring-slate-100 transition-all cursor-pointer"
           >
             <option value="All">All Courses</option>
-            <option value="BCA">BCA</option>
-            <option value="MCA">MCA</option>
-            <option value="B.Tech">B.Tech</option>
-            <option value="M.Tech">M.Tech</option>
-            <option value="BBA">BBA</option>
-            <option value="MBA">MBA</option>
+            <option value="Software Development">Software Development</option>
+            <option value="Data Science & AI/ML">Data Science & AI/ML</option>
+            <option value="Cyber Security">Cyber Security</option>
+            <option value="Digital Marketing">Digital Marketing</option>
           </select>
 
           {/* Status select */}

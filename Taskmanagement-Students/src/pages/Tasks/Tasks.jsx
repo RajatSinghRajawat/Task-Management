@@ -19,9 +19,9 @@ import { getApiBaseUrl } from '../../utils/api';
 
 const API_BASE = `${getApiBaseUrl()}/api`;
 const COURSES = [
-   "Software-Development", "Data-Science", "Cyber-Security", "Cloud-Computing",
-   "Artificial-Intelligence", "Digital-Marketing", "UI-UX-Design",
-   "Business-Analytics", "Project-Management", "DevOps"
+   "Software Development", "Data Science & AI/ML", "Cyber Security", "Digital Marketing",
+   "Cloud Computing", "Artificial Intelligence", "UI-UX Design",
+   "Business Analytics", "Project Management", "DevOps"
 ];
 
 const Tasks = () => {
@@ -288,7 +288,7 @@ const Tasks = () => {
                        <div className={`px-4 py-2 text-[9px] font-bold uppercase tracking-wide rounded-xl border-2 ${selectedTask.Priority === 'High' ? 'border-rose-200 bg-rose-50 text-rose-600' : 'border-blue-200 bg-blue-50 text-blue-700'}`}>{selectedTask.Priority} Priority</div>
                     </div>
 
-                    <h1 className="text-5xl lg:text-7xl font-bold text-slate-800 tracking-tighter leading-none ">{selectedTask.Title}</h1>
+                    <h1 className="text-3xl lg:text-4xl font-bold text-slate-800 tracking-tight leading-tight">{selectedTask.Title}</h1>
                     
                     <div className="flex flex-wrap items-center gap-10 pt-6">
                        <div className="flex items-center gap-4">

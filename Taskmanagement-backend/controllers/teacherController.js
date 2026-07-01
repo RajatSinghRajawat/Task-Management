@@ -104,7 +104,7 @@ const createTeacher = async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            designation: designation || "Professor",
+            designation: designation || "Trainer",
             phone: phone || "",
             subject: subject || "General",
             joinedDate: joinedDate || "",

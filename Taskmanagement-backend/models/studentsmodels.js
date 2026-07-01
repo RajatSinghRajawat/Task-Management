@@ -16,18 +16,6 @@ const studentsAuth = mongoose.Schema({
     },
     courses: {
         type: String,
-        enum: [
-            "Software-Development",
-            "Data-Science",
-            "Cyber-Security",
-            "Cloud-Computing",
-            "Artificial-Intelligence",
-            "Digital-Marketing",
-            "UI-UX-Design",
-            "Business-Analytics",
-            "Project-Management",
-            "DevOps"
-        ],
         required: true
     },
     batch: {

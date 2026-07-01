@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+html, body {
+  @apply antialiased text-slate-900 bg-[#f8fafc];
+  font-size: 14px;
+}

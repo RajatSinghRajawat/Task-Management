@@ -2,13 +2,21 @@ import { useState, useEffect } from 'react';
 import { MdClose, MdCloudUpload } from 'react-icons/md';
 import { getApiBaseUrl } from '../utils/api';
 
+const COURSES = [
+  "Software Development", "Data Science & AI/ML", "Cyber Security", "Digital Marketing",
+  "Cloud Computing", "Artificial Intelligence", "UI-UX Design",
+  "Business Analytics", "Project Management", "DevOps"
+];
+
+const BATCHES = ["2024", "2025", "2026", "2027", "2028", "2029", "2030"];
+
 const StudentModal = ({ isOpen, onClose, onSave, student }) => {
   const [form, setForm] = useState({
     fullName: '',
     email: '',
     password: '',
-    course: 'BCA',
-    batch: '2023-2026',
+    course: COURSES[0],
+    batch: BATCHES[0],
     status: 'Active'
   });
   const [imageFile, setImageFile] = useState(null);
@@ -20,9 +28,9 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
       setForm({
         fullName: student.fullName || student.name || '',
         email: student.email || '',
-        password: '', // Leave blank for edit unless they want to change
-        course: student.course || student.courses || 'BCA',
-        batch: student.batch || '2023-2026',
+        password: '', // Leave blank for edit unless changing
+        course: student.course || student.courses || COURSES[0],
+        batch: student.batch || BATCHES[0],
         status: student.status || 'Active'
       });
       setImagePreview(student.profileImage ? `${getApiBaseUrl()}/${student.profileImage}` : null);
@@ -31,8 +39,8 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
         fullName: '',
         email: '',
         password: '',
-        course: 'BCA',
-        batch: '2023-2026',
+        course: COURSES[0],
+        batch: BATCHES[0],
         status: 'Active'
       });
       setImageFile(null);
@@ -84,10 +92,11 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
         
         {/* Header */}
         <div className="h-16 flex items-center justify-between px-8 border-b border-slate-100 shrink-0">
-          <h3 className="font-black text-slate-800 tracking-tight">
+          <h3 className="font-black text-slate-800 tracking-tight text-base">
             {student ? 'Modify Scholar Profile' : 'Enroll New Scholar'}
           </h3>
           <button 
+            type="button"
             onClick={onClose} 
             className="p-1.5 rounded-lg bg-slate-50 text-slate-400 hover:text-slate-800 transition-colors"
           >
@@ -106,7 +115,7 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
                 type="text" 
                 value={form.fullName}
                 onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-red-500 focus:bg-white transition-all shadow-inner"
+                className="w-full px-5 py-3.5 bg-slate-50/50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all shadow-inner"
                 placeholder="Enter full name..."
                 required
               />
@@ -119,7 +128,7 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
                 type="email" 
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-red-500 focus:bg-white transition-all shadow-inner"
+                className="w-full px-5 py-3.5 bg-slate-50/50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all shadow-inner"
                 placeholder="student@example.com"
                 required
               />
@@ -134,7 +143,7 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
                 type="password" 
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-red-500 focus:bg-white transition-all shadow-inner"
+                className="w-full px-5 py-3.5 bg-slate-50/50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all shadow-inner"
                 placeholder="Enter account security key..."
                 required={!student}
               />
@@ -147,18 +156,9 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
                 <select
                   value={form.course}
                   onChange={(e) => setForm({ ...form, course: e.target.value })}
-                  className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-red-500 focus:bg-white transition-all shadow-inner"
+                  className="w-full px-5 py-3.5 bg-slate-50/50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all shadow-inner cursor-pointer"
                 >
-                  <option value="Software Development">Software Development</option>
-                  <option value="Data Science & AI/ML">Data Science & AI/ML</option>
-                  <option value="Cyber Security">Cyber Security</option>
-                  <option value="Digital Marketing">Digital Marketing</option>
-                  <option value="Cloud Computing">Cloud Computing</option>
-                  <option value="Artificial Intelligence">Artificial Intelligence</option>
-                  <option value="UI-UX Design">UI-UX Design</option>
-                  <option value="Business Analytics">Business Analytics</option>
-                  <option value="Project Management">Project Management</option>
-                  <option value="DevOps">DevOps</option>
+                  {COURSES.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
 
@@ -168,12 +168,9 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
                 <select
                   value={form.batch}
                   onChange={(e) => setForm({ ...form, batch: e.target.value })}
-                  className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-red-500 focus:bg-white transition-all shadow-inner"
+                  className="w-full px-5 py-3.5 bg-slate-50/50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all shadow-inner cursor-pointer"
                 >
-                  <option value="2022-2025">2022-2025</option>
-                  <option value="2023-2026">2023-2026</option>
-                  <option value="2024-2027">2024-2027</option>
-                  <option value="2025-2028">2025-2028</option>
+                  {BATCHES.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
             </div>
@@ -184,7 +181,7 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
               <select
                 value={form.status}
                 onChange={(e) => setForm({ ...form, status: e.target.value })}
-                className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-red-500 focus:bg-white transition-all shadow-inner"
+                className="w-full px-5 py-3.5 bg-slate-50/50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all shadow-inner cursor-pointer"
               >
                 <option value="Active">Active</option>
                 <option value="Suspended">Suspended</option>
@@ -205,7 +202,7 @@ const StudentModal = ({ isOpen, onClose, onSave, student }) => {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-4 px-6 bg-slate-900 text-white text-xs font-black uppercase tracking-wider rounded-2xl hover:bg-red-600 shadow-lg hover:shadow-red-500/20 transition-all disabled:opacity-75"
+              className="flex-1 py-4 px-6 bg-slate-900 text-white text-xs font-black uppercase tracking-wider rounded-2xl hover:bg-blue-700 hover:shadow-lg shadow-xl shadow-slate-100 transition-all disabled:opacity-75"
             >
               {loading ? 'Saving Changes...' : 'Save Profile'}
             </button>

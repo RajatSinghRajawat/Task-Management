@@ -27,9 +27,9 @@ const TASKS_API = `${getApiBaseUrl()}/api/tasks`;
 const AUTH_TOKEN = () => localStorage.getItem('token');
 
 const COURSES = [
-   "Software-Development", "Data-Science", "Cyber-Security", "Cloud-Computing",
-   "Artificial-Intelligence", "Digital-Marketing", "UI-UX-Design",
-   "Business-Analytics", "Project-Management", "DevOps"
+   "Software Development", "Data Science & AI/ML", "Cyber Security", "Digital Marketing",
+   "Cloud Computing", "Artificial Intelligence", "UI-UX Design",
+   "Business Analytics", "Project Management", "DevOps"
 ];
 
 const BATCHES = ["2024", "2025", "2026", "2027", "2028", "2029", "2030"];

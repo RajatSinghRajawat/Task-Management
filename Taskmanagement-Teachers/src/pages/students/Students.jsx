@@ -12,15 +12,16 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { getApiBaseUrl } from '../../utils/api';
+import StudentModal from '../../components/StudentModal';
 
 const AUTH_TOKEN = () => localStorage.getItem('token');
 const API = `${getApiBaseUrl()}/api/students`;
 const BASE_URL = `${getApiBaseUrl()}/`;
 
 const COURSES = [
-  "Software-Development", "Data-Science", "Cyber-Security", "Cloud-Computing", 
-  "Artificial-Intelligence", "Digital-Marketing", "UI-UX-Design", 
-  "Business-Analytics", "Project-Management", "DevOps"
+  "Software Development", "Data Science & AI/ML", "Cyber Security", "Digital Marketing", 
+  "Cloud Computing", "Artificial Intelligence", "UI-UX Design", 
+  "Business Analytics", "Project Management", "DevOps"
 ];
 
 const Students = () => {
@@ -61,6 +62,29 @@ const Students = () => {
     } catch { toast.error('Purge Failed'); }
   };
 
+  const handleSaveStudent = async (formData) => {
+    try {
+      const config = {
+        headers: { 
+          Authorization: `Bearer ${AUTH_TOKEN()}`
+        }
+      };
+
+      if (currentStudent) {
+        await axios.put(`${API}/${currentStudent._id}`, formData, config);
+        toast.success('Scholar profile updated');
+      } else {
+        await axios.post(API, formData, config);
+        toast.success('Scholar enrolled successfully');
+      }
+      fetchStudents(true);
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Operation failed');
+      throw err;
+    }
+  };
+
   const filteredStudents = useMemo(() => {
     return students.filter(s => {
       const matchSearch = s.fullName.toLowerCase().includes(search.toLowerCase()) || s.email.toLowerCase().includes(search.toLowerCase());
@@ -89,6 +113,12 @@ const Students = () => {
            </p>
         </div>
         <div className="flex items-center gap-3">
+           <button 
+             onClick={() => { setCurrentStudent(null); setModalOpen(true); }} 
+             className="px-6 py-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-2xl font-bold text-xs shadow-xl shadow-blue-100 flex items-center gap-2 active:scale-95 transition-all"
+           >
+              <MdAdd size={20} /> Add Scholar
+           </button>
            <button onClick={() => fetchStudents(true)} className={`p-3.5 bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-slate-200/50 text-slate-400 hover:text-blue-700 transition-all ${refreshing ? 'animate-spin' : ''}`}>
               <MdRefresh size={22} />
            </button>
@@ -200,28 +230,12 @@ const Students = () => {
          </div>
       </div>
       
-      {/* Modal Re-Polish */}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[200] flex items-center justify-center p-4">
-           <motion.div 
-             initial={{ scale: 0.95, opacity: 0 }}
-             animate={{ scale: 1, opacity: 1 }}
-             className="bg-white rounded-3xl p-8 w-full max-w-lg shadow-2xl relative"
-           >
-              <button onClick={() => setModalOpen(false)} className="absolute top-6 right-6 p-2 text-slate-300 hover:text-rose-500 transition-all"><MdClose size={24} /></button>
-              <h2 className="text-2xl font-bold text-slate-800 tracking-tight  mb-6">Modify Identity</h2>
-              <div className="space-y-5">
-                 <div>
-                    <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wide mb-2 block ml-1">Personnel Full Name</label>
-                    <input className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-400 transition-all" defaultValue={currentStudent?.fullName} />
-                 </div>
-                 <button className="w-full py-4.5 bg-blue-700 text-white rounded-[20px] font-bold text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-100 hover:bg-blue-800 transition-all mt-4">
-                    Commit Changes
-                 </button>
-              </div>
-           </motion.div>
-        </div>
-      )}
+      <StudentModal 
+        isOpen={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        onSave={handleSaveStudent} 
+        student={currentStudent} 
+      />
     </div>
   );
 };

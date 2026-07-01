@@ -7,7 +7,8 @@ import {
   MdClass, MdCalendarToday, MdTrendingUp, MdAssignment, MdCheckCircle,
   MdWarning, MdPerson, MdEdit, MdAssessment, MdOutlineClass, MdRefresh,
   MdLayers, MdAutoFixHigh, MdOutlineCalendarMonth, MdAnalytics, MdKeyboardArrowRight,
-  MdDescription, MdVisibility
+  MdDescription, MdVisibility, MdClose, MdAccessTime, MdAttachFile, MdCloudDownload,
+  MdChatBubbleOutline, MdQuestionAnswer
 } from 'react-icons/md';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -25,6 +26,7 @@ const StudentDetail = () => {
   const [activity, setActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedActivity, setSelectedActivity] = useState(null);
+  const [previewSubmission, setPreviewSubmission] = useState(null);
 
   const fetchStudentData = useCallback(async () => {
     setLoading(true);
@@ -37,7 +39,7 @@ const StudentDetail = () => {
       ]);
       setStudent(stuRes.data);
       setActivity(actRes.data || []);
-      // Filter reports for this specific student
+      // Filter reports for this student
       const studentReports = (repRes.data.reports || []).filter(r => r.student?._id === id || r.student === id);
       setReports(studentReports);
     } catch (err) {
@@ -77,9 +79,6 @@ const StudentDetail = () => {
         <button onClick={() => navigate('/students')} className="flex items-center gap-2 text-slate-400 hover:text-blue-700 transition-colors font-bold text-sm uppercase tracking-wide active:scale-95">
           <MdArrowBack size={20}/> Student Directory
         </button>
-        <button className="bg-blue-700 text-white px-8 py-3 rounded-2xl font-bold text-xs shadow-xl shadow-blue-100 hover:bg-blue-800 transition-all flex items-center gap-2 active:scale-95">
-          <MdEdit size={18} /> Update Profile
-        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -95,7 +94,7 @@ const StudentDetail = () => {
                   className="w-full h-full object-cover"
                 />
              </div>
-             <h2 className="text-2xl font-bold text-slate-800 mt-6 tracking-tight  relative z-10">{student.fullName}</h2>
+             <h2 className="text-2xl font-bold text-slate-800 mt-6 tracking-tight relative z-10">{student.fullName}</h2>
              <p className="text-blue-700 font-bold uppercase tracking-wide text-[9px] mt-1 relative z-10">{student.course?.replace(/-/g, ' ')}</p>
              
              <div className="mt-8 pt-8 border-t border-slate-50 space-y-4 text-left relative z-10">
@@ -109,7 +108,7 @@ const StudentDetail = () => {
                 </div>
                 <div className="flex items-center gap-4 text-slate-500">
                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center"><MdSchool size={16} /></div>
-                   <span className="text-xs font-bold">Batch {student.batch} • Class {student.className || '--'}</span>
+                   <span className="text-xs font-bold">Batch {student.batch}</span>
                 </div>
              </div>
           </div>
@@ -118,13 +117,13 @@ const StudentDetail = () => {
           <div className="bg-slate-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden group">
              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full translate-x-16 -translate-y-16 blur-2xl group-hover:scale-110 transition-transform duration-1000"></div>
              <div className="relative z-10">
-                <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
-                   <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" /> Student Reports
-                </h3>
+                <div className="flex justify-between items-center mb-6">
+                   <h3 className="text-sm font-bold uppercase tracking-widest flex items-center gap-2"><MdDescription size={20} className="text-indigo-400" /> Evaluations</h3>
+                </div>
                 <div className="space-y-4">
                    {reports.length > 0 ? reports.slice(0, 3).map((r, i) => (
-                      <div key={i} className="p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all cursor-pointer" onClick={() => navigate('/reports')}>
-                         <div className="flex justify-between items-center">
+                      <div key={i} className="p-4 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between hover:bg-white/10 transition-all cursor-pointer">
+                         <div>
                             <p className="text-xs font-bold text-slate-300">{r.reportTitle}</p>
                             <span className="text-[9px] font-bold text-indigo-400">{r.overallPerformance}</span>
                          </div>
@@ -144,7 +143,7 @@ const StudentDetail = () => {
               {stats.map((s, i) => (
                 <div key={i} className="bg-white/80 backdrop-blur-2xl p-6 rounded-[32px] border border-slate-200/50 shadow-sm text-center group hover:shadow-xl transition-all">
                    <div className={`${s.color} mb-3 flex justify-center group-hover:scale-110 transition-transform`}>{s.icon}</div>
-                   <p className="text-xl font-bold text-slate-800  leading-none">{s.value}</p>
+                   <p className="text-xl font-bold text-slate-800 leading-none">{s.value}</p>
                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wide mt-2">{s.label}</p>
                 </div>
               ))}
@@ -165,7 +164,6 @@ const StudentDetail = () => {
               </div>
               
               <div className="flex gap-4">
-                 {/* Weekday Labels (Hindi/Urdu Terms Mapping) */}
                  <div className="flex flex-col justify-between py-1 text-[9px] font-bold text-slate-300 uppercase tracking-tight">
                     <span>SOM</span>
                     <span>MAN</span>
@@ -225,7 +223,7 @@ const StudentDetail = () => {
                        exit={{ opacity: 0, scale: 0.9 }}
                        className="absolute inset-0 bg-slate-900/95 backdrop-blur-md z-[60] flex flex-col items-center justify-center p-8 text-center rounded-3xl"
                     >
-                       <button onClick={() => setSelectedActivity(null)} className="absolute top-8 right-8 p-3 bg-white/10 text-white/40 rounded-2xl hover:text-white transition-all"><MdArrowBack className="rotate-90" size={20} /></button>
+                       <button type="button" onClick={() => setSelectedActivity(null)} className="absolute top-8 right-8 p-3 bg-white/10 text-white/40 rounded-2xl hover:text-white transition-all"><MdArrowBack className="rotate-90" size={20} /></button>
                        <div className={`w-16 h-16 rounded-2xl mb-6 flex items-center justify-center ${selectedActivity.status === 'Completed' ? 'bg-emerald-500' : selectedActivity.status === 'Late' ? 'bg-amber-500' : 'bg-rose-500'} text-white shadow-2xl shadow-slate-900/50`}>
                           <MdCheckCircle size={32} />
                        </div>
@@ -236,6 +234,7 @@ const StudentDetail = () => {
                              {selectedActivity.status}
                           </div>
                           <button 
+                             type="button"
                              onClick={() => navigate(`/tasks/${selectedActivity.taskId}`)}
                              className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
                           >
@@ -281,9 +280,24 @@ const StudentDetail = () => {
                                </span>
                             </td>
                             <td className="px-8 py-5 text-center">
-                               <p className="text-[10px] font-bold text-slate-500">
-                                  {task.submissionDate ? new Date(task.submissionDate).toLocaleString() : '---'}
-                               </p>
+                               {task.submissionDate ? (
+                                  <div className="flex flex-col items-center gap-1.5">
+                                     <p className="text-[10px] font-bold text-slate-500">
+                                        {new Date(task.submissionDate).toLocaleString()}
+                                     </p>
+                                     {task.submissionData && (
+                                        <button 
+                                           type="button"
+                                           onClick={() => setPreviewSubmission({ data: task.submissionData, student })}
+                                           className="px-3 py-1 bg-violet-50 text-violet-600 rounded-lg text-[9px] font-black uppercase tracking-wider hover:bg-violet-600 hover:text-white transition-all shadow-sm active:scale-95 animate-in fade-in"
+                                        >
+                                           Inspect
+                                        </button>
+                                     )}
+                                  </div>
+                               ) : (
+                                  <p className="text-[10px] font-bold text-slate-300">---</p>
+                                )}
                             </td>
                          </tr>
                        )) : (
@@ -311,6 +325,102 @@ const StudentDetail = () => {
            </div>
         </div>
 
+      </div>
+
+      {previewSubmission && (
+        <SubmissionModal 
+          submission={previewSubmission.data} 
+          student={previewSubmission.student} 
+          onClose={() => setPreviewSubmission(null)} 
+        />
+      )}
+    </div>
+  );
+};
+
+// ── Submission Preview Modal ──────────────────────────────────────────
+const SubmissionModal = ({ submission, student, onClose }) => {
+  if (!submission) return null;
+
+  return (
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xl z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col max-h-[92vh] border border-white/20">
+        <div className="p-8 border-b border-slate-50 flex justify-between items-center bg-[#F8FAFC]/80 backdrop-blur-sm">
+           <div className="flex items-center gap-6">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-xl ring-4 ring-white relative group">
+                 <img src={student.profileImage ? `${getApiBaseUrl()}/${student.profileImage}` : `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.fullName}`} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+              </div>
+              <div>
+                 <p className="text-[9px] text-violet-600 font-bold uppercase tracking-[0.2em] mb-0.5">Submission Portfolio</p>
+                 <h2 className="text-2xl font-bold text-slate-900 tracking-tight">{student.fullName}</h2>
+                 <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wide flex items-center gap-2"><MdAccessTime className="text-slate-300"/> Logged {new Date(submission.submissionDate).toLocaleString()}</p>
+              </div>
+           </div>
+           <button onClick={onClose} className="w-12 h-12 bg-white text-slate-400 hover:text-rose-600 rounded-xl transition-all shadow-sm border border-slate-50 flex items-center justify-center"><MdClose size={24} /></button>
+        </div>
+
+        <div className="p-8 overflow-y-auto space-y-10 no-scrollbar">
+           {submission.answers?.length > 0 && (
+             <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                   <div className="w-8 h-8 bg-blue-50 text-blue-700 rounded-lg flex items-center justify-center shadow-sm"><MdQuestionAnswer size={16} /></div>
+                   <h3 className="text-[10px] font-bold text-slate-800 uppercase tracking-[0.2em]">Response Intelligence</h3>
+                </div>
+                <div className="grid grid-cols-1 gap-4">
+                   {submission.answers.map((ans, i) => (
+                     <div key={i} className="p-6 bg-[#F8FAFC] rounded-2xl border border-slate-100 group hover:bg-white hover:shadow-lg transition-all">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+                           <span className="w-5 h-5 rounded-md bg-white border border-slate-200 flex items-center justify-center text-[7px] text-slate-900">{i+1}</span>
+                           {ans.questionText}
+                        </p>
+                        <div className="text-xs font-bold text-slate-800 leading-relaxed bg-white p-4 rounded-xl border border-slate-50 group-hover:border-violet-100">
+                           {ans.answer || <span className="text-slate-300 italic font-medium">No response recorded.</span>}
+                        </div>
+                     </div>
+                   ))}
+                </div>
+             </div>
+           )}
+
+           {submission.files?.length > 0 && (
+             <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                   <div className="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center shadow-sm"><MdAttachFile size={16} /></div>
+                   <h3 className="text-[10px] font-bold text-slate-800 uppercase tracking-[0.2em]">Deployment Assets</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                   {submission.files.map((file, i) => (
+                      <a key={i} href={`${getApiBaseUrl()}/${file.replace(/\\/g, '/')}`} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-white border border-slate-50 rounded-[20px] hover:border-violet-200 transition-all group cursor-pointer animate-in fade-in">
+                         <div className="flex items-center gap-3 truncate">
+                            <div className="w-10 h-10 bg-slate-50 text-slate-400 group-hover:bg-violet-600 group-hover:text-white rounded-xl flex items-center justify-center shrink-0 transition-all"><MdCloudDownload size={20} /></div>
+                            <div className="truncate">
+                               <p className="text-[11px] font-bold text-slate-800 truncate">{file.split(/[\\/]/).pop()}</p>
+                               <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wide">Binary File</p>
+                            </div>
+                         </div>
+                         <div className="w-8 h-8 bg-slate-50 text-slate-400 hover:text-violet-600 rounded-lg flex items-center justify-center transition-all"><MdVisibility size={16} /></div>
+                      </a>
+                   ))}
+                </div>
+             </div>
+           )}
+
+           <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center shadow-sm"><MdChatBubbleOutline size={16} /></div>
+                 <h3 className="text-[10px] font-bold text-slate-800 uppercase tracking-[0.2em]">Student Narrative</h3>
+              </div>
+              <div className="p-6 bg-amber-50/20 rounded-2xl border border-amber-100/30">
+                 <p className="text-slate-600 text-xs font-bold leading-relaxed italic">
+                    "{submission.feedback || submission.comments || "No commentary provided."}"
+                 </p>
+              </div>
+           </div>
+        </div>
+
+        <div className="p-8 border-t border-slate-50 bg-[#F8FAFC]/80 backdrop-blur-sm flex justify-end">
+           <button onClick={onClose} className="px-10 py-4 bg-slate-900 text-white font-bold text-[10px] uppercase tracking-wide rounded-xl shadow-xl hover:bg-violet-600 transition-all">Finalize Review</button>
+        </div>
       </div>
     </div>
   );

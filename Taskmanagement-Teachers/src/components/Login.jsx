@@ -171,14 +171,7 @@ const Login = () => {
               </div>
             </form>
 
-            <div className="mt-12 text-center">
-               <p className="text-xs font-bold text-slate-400">
-                  New Faculty Personnel?{' '}
-                  <Link to="/register" className="text-blue-700 font-bold uppercase tracking-wide hover:underline ml-1">
-                    Request Credentials
-                  </Link>
-               </p>
-            </div>
+            {/* Registration link removed */}
           </div>
         </div>
 

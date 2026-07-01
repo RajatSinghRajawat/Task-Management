@@ -27,9 +27,9 @@ import { getApiBaseUrl } from '../../utils/api';
 
 const API_BASE = `${getApiBaseUrl()}/api`;
 const COURSES = [
-  "Software-Development", "Data-Science", "Cyber-Security", "Cloud-Computing",
-  "Artificial-Intelligence", "Digital-Marketing", "UI-UX-Design",
-  "Business-Analytics", "Project-Management", "DevOps"
+  "Software Development", "Data Science & AI/ML", "Cyber Security", "Digital Marketing",
+  "Cloud Computing", "Artificial Intelligence", "UI-UX Design",
+  "Business Analytics", "Project Management", "DevOps"
 ];
 
 const Materials = () => {
@@ -282,7 +282,7 @@ const Materials = () => {
                        <div className={`px-4 py-2 text-[9px] font-bold uppercase tracking-[0.2em] rounded-xl border-2 ${theme.border} ${theme.bg} ${theme.text}`}>{selectedMaterial.subject}</div>
                     </div>
 
-                    <h1 className="text-5xl lg:text-7xl font-bold text-slate-800 tracking-tighter leading-none  uppercase">{selectedMaterial.title}</h1>
+                    <h1 className="text-3xl lg:text-4xl font-bold text-slate-800 tracking-tight leading-tight uppercase">{selectedMaterial.title}</h1>
                     
                     <div className="flex flex-wrap items-center gap-10 pt-6">
                        <div className="flex items-center gap-4">

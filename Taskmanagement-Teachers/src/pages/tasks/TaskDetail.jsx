@@ -77,16 +77,16 @@ const SubmissionModal = ({ submission, student, onClose }) => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                    {submission.files.map((file, i) => (
-                     <div key={i} className="flex items-center justify-between p-4 bg-white border border-slate-50 rounded-[20px] hover:border-violet-200 transition-all group">
-                        <div className="flex items-center gap-3 truncate">
-                           <div className="w-10 h-10 bg-slate-50 text-slate-400 group-hover:bg-violet-600 group-hover:text-white rounded-xl flex items-center justify-center shrink-0 transition-all"><MdCloudDownload size={20} /></div>
-                           <div className="truncate">
-                              <p className="text-[11px] font-bold text-slate-800 truncate">{file.split('/').pop()}</p>
-                              <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wide">Binary File</p>
-                           </div>
-                        </div>
-                        <a href={`${getApiBaseUrl()}/${file}`} target="_blank" rel="noreferrer" className="w-8 h-8 bg-slate-50 text-slate-400 hover:text-violet-600 rounded-lg flex items-center justify-center transition-all"><MdVisibility size={16} /></a>
-                     </div>
+                      <a key={i} href={`${getApiBaseUrl()}/${file.replace(/\\/g, '/')}`} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-white border border-slate-50 rounded-[20px] hover:border-violet-200 transition-all group cursor-pointer">
+                         <div className="flex items-center gap-3 truncate">
+                            <div className="w-10 h-10 bg-slate-50 text-slate-400 group-hover:bg-violet-600 group-hover:text-white rounded-xl flex items-center justify-center shrink-0 transition-all"><MdCloudDownload size={20} /></div>
+                            <div className="truncate">
+                               <p className="text-[11px] font-bold text-slate-800 truncate">{file.split(/[\\/]/).pop()}</p>
+                               <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wide">Binary File</p>
+                            </div>
+                         </div>
+                         <div className="w-8 h-8 bg-slate-50 text-slate-400 hover:text-violet-600 rounded-lg flex items-center justify-center transition-all"><MdVisibility size={16} /></div>
+                      </a>
                    ))}
                 </div>
              </div>
@@ -250,10 +250,10 @@ const TaskDetail = () => {
                               <h2 className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2"><MdAttachFile className="text-violet-500" /> Intelligence Assets</h2>
                               <div className="grid grid-cols-1 gap-2">
                                  {task.Attachments.map((a, i) => (
-                                   <a key={i} href={`${getApiBaseUrl()}/${a}`} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-2xl border border-slate-50 hover:bg-white hover:shadow-lg transition-all group">
+                                   <a key={i} href={`${getApiBaseUrl()}/${a.replace(/\\/g, '/')}`} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-2xl border border-slate-50 hover:bg-white hover:shadow-lg transition-all group">
                                       <div className="flex items-center gap-3 truncate">
                                          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-[8px] font-bold text-rose-500 border border-slate-50">PDF</div>
-                                         <span className="text-[11px] font-bold text-slate-700 truncate max-w-[200px]">{a.split('/').pop()}</span>
+                                         <span className="text-[11px] font-bold text-slate-700 truncate max-w-[200px]">{a.split(/[\\/]/).pop()}</span>
                                       </div>
                                       <MdFileDownload className="text-slate-300 group-hover:text-violet-600 transition-colors" size={18} />
                                    </a>

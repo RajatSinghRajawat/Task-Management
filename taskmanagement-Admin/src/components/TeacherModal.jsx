@@ -7,7 +7,7 @@ const TeacherModal = ({ isOpen, onClose, onSave, teacher }) => {
     name: '',
     email: '',
     password: '',
-    designation: 'Professor',
+    designation: 'Digital Marketing',
     phone: '',
     subject: 'Computer Science',
     joinedDate: '',
@@ -23,7 +23,7 @@ const TeacherModal = ({ isOpen, onClose, onSave, teacher }) => {
         name: teacher.name || '',
         email: teacher.email || '',
         password: '', // Leave empty to keep unchanged
-        designation: teacher.designation || 'Professor',
+        designation: teacher.designation || 'Digital Marketing',
         phone: teacher.phone || '',
         subject: teacher.subject || 'General',
         joinedDate: teacher.joinedDate || '',
@@ -35,7 +35,7 @@ const TeacherModal = ({ isOpen, onClose, onSave, teacher }) => {
         name: '',
         email: '',
         password: '',
-        designation: 'Professor',
+        designation: 'Digital Marketing',
         phone: '',
         subject: 'Computer Science',
         joinedDate: '',
@@ -105,22 +105,6 @@ const TeacherModal = ({ isOpen, onClose, onSave, teacher }) => {
 
         {/* Form Content */}
         <form onSubmit={handleSubmit} className="flex-1 p-8 space-y-6 overflow-y-auto max-h-[75vh]">
-          
-          {/* Profile Image Uploader */}
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative w-28 h-28 rounded-full border-2 border-slate-100 bg-slate-50 flex items-center justify-center overflow-hidden group shadow-inner">
-              {imagePreview ? (
-                <img src={imagePreview} className="w-full h-full object-cover" />
-              ) : (
-                <MdCloudUpload className="text-slate-300" size={32} />
-              )}
-              <label className="absolute inset-0 bg-black/40 text-white text-[10px] font-black uppercase tracking-wider flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
-                Change Photo
-                <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-              </label>
-            </div>
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Faculty Photo</span>
-          </div>
 
           <div className="space-y-4">
             {/* Full Name */}
@@ -173,11 +157,10 @@ const TeacherModal = ({ isOpen, onClose, onSave, teacher }) => {
                   onChange={(e) => setForm({ ...form, designation: e.target.value })}
                   className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 text-slate-800 text-sm font-semibold rounded-2xl focus:outline-none cursor-pointer"
                 >
-                  <option value="Professor">Professor</option>
-                  <option value="Associate Professor">Associate Professor</option>
-                  <option value="Assistant Professor">Assistant Professor</option>
-                  <option value="Lecturer">Lecturer</option>
-                  <option value="Department Head">Department Head</option>
+                  <option value="Digital Marketing">Digital Marketing</option>
+                  <option value="Software Engineer">Software Engineer</option>
+                  <option value="Cyber Security">Cyber Security</option>
+                  <option value="Ai/Ml & Data Science">Ai/Ml & Data Science</option>
                 </select>
               </div>
 

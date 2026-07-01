@@ -176,14 +176,7 @@ const Login = () => {
               </div>
             </form>
 
-            <div className="mt-12 text-center">
-               <p className="text-xs font-bold text-slate-400">
-                  New to the Learning Network?{' '}
-                  <Link to="/register" className="text-indigo-600 font-black uppercase tracking-widest hover:underline ml-1">
-                    Enroll Today
-                  </Link>
-               </p>
-            </div>
+            {/* Registration link removed */}
           </div>
         </div>
 

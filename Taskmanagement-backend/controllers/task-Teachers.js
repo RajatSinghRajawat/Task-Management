@@ -17,7 +17,8 @@ const createTask = async (req, res) => {
             Priority,
             Assigned_To,
             Deadline,
-            Batch
+            Batch,
+            questions
         } = req.body;
 
         if (!Title || !course || !Task_Type || !Deadline || !Batch) {
@@ -29,7 +30,16 @@ const createTask = async (req, res) => {
         if (Assigned_To && Assigned_To.length > 0) {
             students = await StudentAuth.find({ _id: { $in: Assigned_To } });
         } else {
-            students = await StudentAuth.find({ courses: course, batch: Batch });
+            const courseAlternate = course.includes('-') ? course.replace(/-/g, ' ') : course.replace(/\s+/g, '-');
+            students = await StudentAuth.find({ 
+                courses: { $in: [course, courseAlternate] }, 
+                batch: Batch 
+            });
+        }
+
+        let parsedQuestions = [];
+        if (questions) {
+            parsedQuestions = typeof questions === 'string' ? JSON.parse(questions) : questions;
         }
 
         // 👇 Create Task
@@ -43,7 +53,8 @@ const createTask = async (req, res) => {
             Batch,
             Assigned_To: students.map(s => s._id),
             uploadedBy: req.user.id,
-            Attachments: req.files ? req.files.map(file => file.path) : []
+            Attachments: req.files ? req.files.map(file => file.path) : [],
+            questions: parsedQuestions
         });
 
         await Promise.all(students.map(s =>
@@ -227,7 +238,10 @@ const getTasksByCourse = async (req, res) => {
         const { course, batch } = req.query;
 
         const query = {};
-        if (course) query.course = course;
+        if (course) {
+            const courseAlternate = course.includes('-') ? course.replace(/-/g, ' ') : course.replace(/\s+/g, '-');
+            query.course = { $in: [course, courseAlternate] };
+        }
         if (batch) query.Batch = batch; // Use capital 'B' as per Model
 
         if (!course && !batch) {
@@ -345,8 +359,9 @@ const getTaskSubmissionStats = async (req, res) => {
         if (!task) return res.status(404).json({ message: "Task not found" });
 
         // 1. Get all students in the course/batch from StudentAuth
+        const courseAlternate = task.course.includes('-') ? task.course.replace(/-/g, ' ') : task.course.replace(/\s+/g, '-');
         const allStudents = await StudentAuth.find({
-            courses: task.course,
+            courses: { $in: [task.course, courseAlternate] },
             batch: task.Batch
         }).select("name email profileImage");
 

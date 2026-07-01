@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     },
     designation: {
         type: String,
-        default: "Professor"
+        default: "Trainer"
     },
     phone: {
         type: String,

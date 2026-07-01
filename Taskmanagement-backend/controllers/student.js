@@ -30,10 +30,14 @@ const createStudent = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
+    const bcrypt = require("bcryptjs");
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const student = new Student({
       name: fullName,
       email,
-      password, // Note: Should be hashed if created manually, but we prefer signup
+      password: hashedPassword,
       courses: course,
       batch,
       status: status || "Active",
@@ -173,7 +177,8 @@ const getStudentById = async (req, res) => {
       return {
         ...task._doc,
         submissionStatus: status,
-        submissionDate
+        submissionDate,
+        submissionData: submission || null
       };
     }));
     
@@ -246,6 +251,14 @@ const updateStudent = async (req, res) => {
     if (updateData.fullName) updateData.name = updateData.fullName;
     if (updateData.course) updateData.courses = updateData.course;
     if (req.file) updateData.profileImage = getUploadUrl(req.file.path);
+
+    if (updateData.password) {
+      const bcrypt = require("bcryptjs");
+      const salt = await bcrypt.genSalt(10);
+      updateData.password = await bcrypt.hash(updateData.password, salt);
+    } else {
+      delete updateData.password;
+    }
 
     const student = await Student.findByIdAndUpdate(
       req.params.id,

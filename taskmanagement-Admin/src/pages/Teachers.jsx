@@ -182,11 +182,10 @@ const Teachers = () => {
             className="px-3 py-2 bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 rounded-xl focus:outline-none focus:border-slate-400 focus:ring-4 focus:ring-slate-100 transition-all cursor-pointer"
           >
             <option value="All">All Designations</option>
-            <option value="Professor">Professor</option>
-            <option value="Associate Professor">Associate Professor</option>
-            <option value="Assistant Professor">Assistant Professor</option>
-            <option value="Lecturer">Lecturer</option>
-            <option value="Department Head">Department Head</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Software Engineer">Software Engineer</option>
+            <option value="Cyber Security">Cyber Security</option>
+            <option value="Ai/Ml & Data Science">Ai/Ml & Data Science</option>
           </select>
         </div>
 
